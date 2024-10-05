@@ -1,11 +1,13 @@
 package handlers
 
 import (
+	"errors"
 	"github.com/gofiber/fiber/v2"
 	"net/http"
 	"strconv"
 	"uri-shortener/internal/models/models_api"
 	"uri-shortener/internal/pkg/errors/router_errors"
+	"uri-shortener/internal/pkg/errors/usecase_errors"
 	"uri-shortener/internal/pkg/router"
 	"uri-shortener/internal/services/usecases"
 )
@@ -60,6 +62,9 @@ func (h *linkHandler) FindLink(c *fiber.Ctx) error {
 
 	fullLink, err := h.linkUseCase.GetFullLink(c.UserContext(), tail)
 	if err != nil {
+		if errors.Is(err, usecase_errors.LinkNotFoundError) {
+			return router.SendError(c, router_errors.NotFoundNoLink)
+		}
 		return router.SendError(c, err)
 	}
 

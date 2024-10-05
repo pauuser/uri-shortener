@@ -2,8 +2,10 @@ package repositories_impl
 
 import (
 	"context"
+	"errors"
 	"github.com/redis/go-redis/v9"
 	"time"
+	"uri-shortener/internal/pkg/errors/usecase_errors"
 	"uri-shortener/internal/services/repositories"
 )
 
@@ -25,5 +27,10 @@ func (l *linkRepositoryImpl) Create(ctx context.Context, linkToShorten string, s
 }
 
 func (l *linkRepositoryImpl) GetFullLink(ctx context.Context, shortLinkTail string) (fullLink string, err error) {
-	return l.client.Get(ctx, shortLinkTail).Result()
+	fullLink, err = l.client.Get(ctx, shortLinkTail).Result()
+	if errors.Is(err, redis.Nil) {
+		return "", usecase_errors.LinkNotFoundError
+	}
+
+	return fullLink, err
 }
