@@ -17,13 +17,13 @@ func NewLinkRepository(redisClient *redis.Client) repositories.LinkRepository {
 	}
 }
 
-func (l *linkRepositoryImpl) Create(ctx context.Context, linkToShorten string, shortLink string, ttlMinutes int) (err error) {
+func (l *linkRepositoryImpl) Create(ctx context.Context, linkToShorten string, shortLinkTail string, ttlMinutes int) (err error) {
 	expiration := time.Duration(ttlMinutes) * time.Minute
-	err = l.client.Set(ctx, shortLink, linkToShorten, expiration).Err()
+	err = l.client.Set(ctx, shortLinkTail, linkToShorten, expiration).Err()
 
 	return err
 }
 
-func (l *linkRepositoryImpl) GetFullLink(ctx context.Context, shortLink string) (fullLink string, err error) {
-	return l.client.Get(ctx, shortLink).Result()
+func (l *linkRepositoryImpl) GetFullLink(ctx context.Context, shortLinkTail string) (fullLink string, err error) {
+	return l.client.Get(ctx, shortLinkTail).Result()
 }

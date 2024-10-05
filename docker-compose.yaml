@@ -1,0 +1,16 @@
+version: '3.7'
+
+volumes:
+  redis-data:
+
+services:
+  uri-redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    environment:
+      - REDIS_PASSWORD=uriuser
+      - REDIS_USER=uri
+    restart: unless-stopped

@@ -1,4 +1,13 @@
 {
   "host": "0.0.0.0",
-  "port": "9000"
+  "port": "5555",
+  "redis": {
+    "address": "127.0.0.1:6379",
+    "database": 0,
+    "password": "uriuser"
+  },
+  "link_configuration": {
+    "tail_length": 6,
+    "domain": "http://127.0.0.1:5555"
+  }
 }
