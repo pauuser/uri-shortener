@@ -62,14 +62,14 @@ Create a configs/settings.json file. Example:
 Endpoint: `POST /`
 
 Request:
-```
+```json
 {
     "url": "https://example.com"
 }
 ```
 
 Response:
-```
+```json
 {
     "short_url": "http://127.0.0.1:5555/abc123"
 }
@@ -87,7 +87,7 @@ Endpoint: `GET /:tail/metrics`
 
 Response:
 
-```
+```json
 {
     "clickCount": 42,
     "created_at_utc": "2025-01-01T12:00:00Z"
