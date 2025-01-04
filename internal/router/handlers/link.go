@@ -68,5 +68,5 @@ func (h *linkHandler) FindLink(c *fiber.Ctx) error {
 		return router.SendError(c, err)
 	}
 
-	return c.Redirect(fullLink, http.StatusMovedPermanently)
+	return c.Redirect(fullLink, http.StatusFound)
 }
