@@ -24,6 +24,7 @@ func NewLinkHandler(router fiber.Router, linkUseCase usecases.LinkUseCase) {
 	router.Route("", func(router fiber.Router) {
 		router.Post("", handler.CreateLink)
 		router.Get("/:tail", handler.FindLink)
+		router.Get("/:tail/metrics", handler.GetMetrics)
 	})
 }
 
@@ -69,4 +70,21 @@ func (h *linkHandler) FindLink(c *fiber.Ctx) error {
 	}
 
 	return c.Redirect(fullLink, http.StatusFound)
+}
+
+func (h *linkHandler) GetMetrics(c *fiber.Ctx) error {
+	tail := c.Params("tail")
+	if tail == "" {
+		return router.SendError(c, router_errors.BadRequestNoLink)
+	}
+
+	fullLink, err := h.linkUseCase.GetMetrics(c.UserContext(), tail)
+	if err != nil {
+		if errors.Is(err, usecase_errors.LinkNotFoundError) {
+			return router.SendError(c, router_errors.NotFoundNoLink)
+		}
+		return router.SendError(c, err)
+	}
+
+	return c.JSON(models_api.ToDto(fullLink))
 }
